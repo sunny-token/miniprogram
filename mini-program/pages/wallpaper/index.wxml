@@ -1,0 +1,70 @@
+<view class="wallpaper-container">
+  <!-- Top Stats & Navigation -->
+  <view class="wallpaper-header" style="padding-top: {{statusBarHeight}}px">
+    <view class="back-btn" bindtap="goBack">✕</view>
+    <view class="streak-badge">连续打卡 {{streakDays}} 天</view>
+    <view class="level-badge master" wx:if="{{streakDays >= 30}}">Master 局长</view>
+    <view class="level-badge" wx:elif="{{streakDays >= 7}}">4K 原画已解锁</view>
+    <view class="level-badge info" wx:elif="{{streakDays >= 3}}">历史查看已解锁</view>
+  </view>
+
+  <!-- Main Wallpaper Swiper (Last 7 Days) -->
+  <swiper class="wallpaper-swiper" 
+          current="{{currentIndex}}" 
+          bindchange="onSwiperChange"
+          circular="{{false}}">
+    <block wx:for="{{historyWallpapers}}" wx:key="date">
+      <swiper-item>
+        <view class="wallpaper-item">
+          <image class="wallpaper-image" 
+                 src="{{item.url}}" 
+                 mode="aspectFill" 
+                 lazy-load 
+                 binderror="onImageError"
+                 data-index="{{index}}"
+                 show-menu-by-longpress></image>
+          
+          <!-- Watermark Overlay (Spec 2.2) -->
+          <view class="watermark-overlay" wx:if="{{!unlocked.noWatermark}}">
+            <text class="watermark-text">人生进度管理局 · @{{item.date}}</text>
+          </view>
+
+          <!-- Style Info -->
+          <view class="style-badge">
+            <text># {{item.style}}</text>
+          </view>
+        </view>
+      </swiper-item>
+    </block>
+  </swiper>
+
+  <!-- Floating Action Bar -->
+  <view class="action-bar" wx:if="{{isTodayLoaded}}">
+    <view class="action-btn share-btn active" bindtap="onShare">
+      <text class="btn-icon">转发</text>
+      <text class="btn-text">分享好友</text>
+    </view>
+    
+    <view class="action-btn save-btn active" bindtap="onSave">
+      <text class="btn-icon">下载</text>
+      <text class="btn-text">{{unlocked.noWatermark ? '保存 4K 高清' : '保存 (带水印)'}}</text>
+    </view>
+
+    <view class="action-btn box-btn {{streakDays >= 3 ? 'active' : ''}}" bindtap="onBlindBox">
+      <text class="btn-icon">盲盒</text>
+      <text class="btn-text">今日惊喜</text>
+    </view>
+  </view>
+
+  <!-- Lock Overlay for History (Spec 2.3) -->
+  <view class="lock-overlay" wx:if="{{streakDays < 3 && !historyWallpapers[currentIndex].isUnlocked}}">
+    <view class="lock-content">
+      <text class="lock-icon">🔒</text>
+      <text class="lock-text">连续打卡 3 天解锁历史壁纸</text>
+      <view class="lock-btn" bindtap="goBack">返回打卡</view>
+    </view>
+  </view>
+
+  <!-- Hint -->
+  <view class="bottom-hint">左右滑动查看近 7 天治愈瞬间</view>
+</view>

@@ -1,0 +1,77 @@
+<view class="container {{theme}}">
+  <!-- View Switcher -->
+  <view class="tab-nav">
+    <view wx:for="{{['year', 'month', 'day']}}" wx:key="index" class="tab-btn {{activeTab === item ? 'active' : ''}}" bindtap="switchTab" data-tab="{{item}}">
+      {{item === 'year' ? '年度' : item === 'month' ? '月度' : '今日'}}
+    </view>
+  </view>
+
+  <!-- Progress Hero -->
+  <view class="hero-section">
+      <view class="circle-visual">
+        <view class="circle-bg"></view>
+        <view class="circle-active" style="background: conic-gradient(var(--primary-container) {{progress}}%, transparent 0);"></view>
+        <view class="progress-value">
+          <text class="num">{{progress}}</text>
+          <text class="unit">%</text>
+        </view>
+      </view>
+    <view class="hero-text">
+      <text class="quote">“白驹过隙，不负韶华”</text>
+      <text class="title">{{label}}已过 <text class="highlight">{{progress}}%</text></text>
+      <view class="remaining-info">
+        <view class="rem-item" wx:if="{{activeTab === 'year' || activeTab === 'month'}}">
+          <view class="icon-calendar"></view>
+          <text>剩余 {{remainingWeeks}} 周</text>
+        </view>
+        <view class="rem-item">
+          <view class="{{activeTab === 'day' ? 'icon-clock' : 'icon-calendar'}}"></view>
+          <text>剩余 {{remaining}} {{remainingLabel}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Tasks -->
+  <view class="task-section">
+    <view class="task-header">
+      <view class="header-left">
+        <text class="task-title">今日待办</text>
+        <text class="task-count">{{tasks.length}} / 3</text>
+      </view>
+      <view class="header-right" wx:if="{{tasks.length < 3}}">
+        <input type="text" value="{{newTaskTitle}}" bindinput="onInputChange" bindconfirm="addTask" placeholder="添加待办..." class="task-input" />
+        <view class="add-btn" bindtap="addTask">+</view>
+      </view>
+    </view>
+
+    <view class="task-list">
+      <block wx:if="{{tasks.length === 0}}">
+        <view class="empty-tasks">
+          <text>今日暂无待办，点击上方添加。</text>
+        </view>
+      </block>
+      <block wx:else>
+        <view wx:for="{{tasks}}" wx:key="id" class="task-item {{item.isCompleted ? 'completed' : ''}}">
+          <view class="checkbox {{item.isCompleted ? 'checked' : ''}}" bindtap="toggleTask" data-id="{{item.id}}">
+            <image src="/images/icon_check.png" class="check-icon" wx:if="{{item.isCompleted}}"></image>
+          </view>
+          <text class="task-content">{{item.title}}</text>
+          <view class="delete-btn" bindtap="deleteTask" data-id="{{item.id}}">×</view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- Decorative -->
+  <view class="zen-image-container">
+    <image src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2BkXng6EbFMU6YAFlyTuKHd9Hcd5V0ZdleWLOnaEs_Jn0Et_MSIt5plhOwdL3H7AzZkiDskuUc-qyUejYHAkTRQGyDWliigloZEwmUPQEq5dnBzoPAyXfdWaRx7L_R6LU9dpbq1DAm4gwN62gXUOwQpDnGlKMfuMVmZJfUVyOrJBjlufoMSCQueM6GT7DybdjezQi_GPjW0O-5eh7pXIsOp--qcygAdV5JuR7yyVZCwBxjOps9b1HqKSAqtSseUBbH1aWuzRLn0o" mode="aspectFill" class="zen-image"></image>
+  </view>
+
+  <!-- Banner Ad -->
+  <view class="ad-container" style="margin-top: 40rpx;" wx:if="{{adUnitId}}">
+    <ad unit-id="{{adUnitId}}"></ad>
+  </view>
+
+  <view class="page-footer-gap"></view>
+</view>

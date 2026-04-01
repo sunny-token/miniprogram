@@ -1,0 +1,315 @@
+/* pages/cycle/index.wxss */
+.container {
+  padding: 40rpx;
+  background-color: var(--surface);
+  min-height: 100vh;
+}
+
+.tab-nav {
+  display: flex;
+  background: var(--surface-container);
+  padding: 8rpx;
+  border-radius: 20rpx;
+  margin-bottom: 60rpx;
+}
+
+.tab-btn {
+  flex: 1;
+  text-align: center;
+  padding: 16rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  border-radius: 16rpx;
+  color: var(--on-surface-variant);
+}
+
+.tab-btn.active {
+  background: var(--primary-container);
+  color: #ffffff;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.hero-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 80rpx;
+}
+
+/* Circle Progress */
+.circle-visual {
+  position: relative;
+  width: 240rpx;
+  height: 240rpx;
+}
+
+.circle-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 12rpx solid var(--primary-container);
+  opacity: 0.1;
+  box-sizing: border-box;
+}
+
+.circle-active {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  -webkit-mask: radial-gradient(transparent 107rpx, #000 108rpx);
+  mask: radial-gradient(transparent 107rpx, #000 108rpx);
+}
+
+.progress-value {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  padding-top: 80rpx;
+}
+
+/* CSS Icons */
+.icon-calendar, .icon-clock {
+  width: 24rpx;
+  height: 24rpx;
+  margin-right: 12rpx;
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  color: var(--on-surface-variant);
+  opacity: 0.6;
+}
+
+.icon-calendar::before {
+  content: "";
+  position: absolute;
+  inset: 0 2rpx 2rpx;
+  border: 2rpx solid currentColor;
+  border-radius: 3rpx;
+}
+
+.icon-calendar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 6rpx;
+  right: 6rpx;
+  height: 4rpx;
+  border-left: 2rpx solid currentColor;
+  border-right: 2rpx solid currentColor;
+}
+
+.icon-clock::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 2rpx solid currentColor;
+  border-radius: 50%;
+}
+
+.icon-clock::after {
+  content: "";
+  position: absolute;
+  left: 11rpx;
+  top: 5rpx;
+  height: 7rpx;
+  width: 5rpx;
+  border-left: 2rpx solid currentColor;
+  border-bottom: 2rpx solid currentColor;
+}
+
+.num {
+  font-size: 48rpx;
+  font-weight: 800;
+  color: var(--on-surface);
+}
+
+.unit {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: var(--primary-container);
+  margin-left: 2rpx;
+}
+
+.hero-text {
+  flex: 1;
+  padding-left: 40rpx;
+}
+
+.quote {
+  font-size: 24rpx;
+  font-style: italic;
+  color: var(--tertiary);
+  opacity: 0.8;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.title {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: var(--primary);
+  line-height: 1.2;
+}
+
+.highlight {
+  color: var(--primary-container);
+}
+
+.remaining-info {
+  margin-top: 24rpx;
+}
+
+.rem-item {
+  display: flex;
+  align-items: center;
+  font-size: 24rpx;
+  color: var(--on-surface-variant);
+  margin-bottom: 8rpx;
+}
+
+.rem-icon {
+  width: 28rpx;
+  height: 28rpx;
+  margin-right: 12rpx;
+  opacity: 0.6;
+}
+
+.task-section {
+  margin-bottom: 80rpx;
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32rpx;
+}
+
+.header-left {
+  display: flex;
+  align-items: baseline;
+  gap: 16rpx;
+}
+
+.task-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--on-surface);
+}
+
+.task-count {
+  font-size: 20rpx;
+  color: var(--on-surface-variant);
+  background: var(--surface-container);
+  padding: 4rpx 16rpx;
+  border-radius: 40rpx;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  border-bottom: 1rpx solid var(--outline-variant);
+}
+
+.task-input {
+  font-size: 24rpx;
+  padding: 8rpx;
+  width: 160rpx;
+}
+
+.add-btn {
+  font-size: 40rpx;
+  color: var(--primary-container);
+  padding: 0 10rpx;
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.empty-tasks {
+  padding: 60rpx 0;
+  text-align: center;
+  font-size: 24rpx;
+  color: var(--on-surface-variant);
+  opacity: 0.6;
+  font-style: italic;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  background: var(--surface-container);
+  padding: 32rpx;
+  border-radius: 20rpx;
+  border: 1rpx solid rgba(193, 200, 196, 0.1);
+}
+
+.task-item.completed {
+  background: var(--surface-container);
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.02);
+}
+
+.checkbox {
+  width: 48rpx;
+  height: 48rpx;
+  border: 4rpx solid var(--outline-variant);
+  border-radius: 50%;
+  margin-right: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkbox.checked {
+  background: var(--primary-container);
+  border-color: var(--primary-container);
+}
+
+.check-icon {
+  width: 28rpx;
+  height: 28rpx;
+}
+
+.task-content {
+  flex: 1;
+  font-size: 28rpx;
+  font-weight: 500;
+  color: var(--on-surface);
+}
+
+.task-item.completed .task-content {
+  color: var(--on-surface-variant);
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.delete-btn {
+  font-size: 36rpx;
+  color: var(--outline-variant);
+  padding: 10rpx;
+}
+
+.zen-image-container {
+  margin-top: 60rpx;
+  margin-bottom: 20rpx;
+  opacity: 0.25;
+  filter: grayscale(100%);
+  -webkit-filter: grayscale(100%);
+}
+
+.page-footer-gap {
+  height: calc(160rpx + env(safe-area-inset-bottom));
+  width: 100%;
+}
+
+.zen-image {
+  width: 100%;
+  height: 240rpx;
+  border-radius: 32rpx;
+}
+

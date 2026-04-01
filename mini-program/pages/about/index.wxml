@@ -1,0 +1,63 @@
+<view class="container {{theme}}">
+  <view class="about-hero">
+    <view class="logo-container">
+      <view class="logo-inner">
+        <text class="logo-text">人生</text>
+      </view>
+    </view>
+    <text class="app-name">人生进度管理局</text>
+    <text class="app-tagline">“在流动的岁月中，寻得片刻宁静”</text>
+    <text class="app-version">v{{appVersion}}</text>
+    <view class="theme-toggle" bindtap="toggleTheme">
+      <text>{{theme === 'light' ? '🌙 深色模式' : '☀️ 浅色模式'}}</text>
+    </view>
+  </view>
+
+  <view class="info-sections">
+    <view class="section">
+      <text class="section-title">产品初衷</text>
+      <text class="section-content">时间并不是我们要抓紧的东西，而是我们要置身其中的河流。本工具旨在以极简、治愈的方式，帮助用户审视生命进度，珍惜当下。</text>
+    </view>
+
+    <view class="section">
+      <text class="section-title">核心功能</text>
+      <view class="feature-list">
+        <view class="feature-item">
+          <text class="feature-name">人生总进度</text>
+          <text class="feature-desc">多维度展示生命长度，提醒生命之珍贵。</text>
+        </view>
+        <view class="feature-item">
+          <text class="feature-name">时间行箧</text>
+          <text class="feature-desc">记录生命中重要的倒计时与纪念日。</text>
+        </view>
+        <view class="feature-item">
+          <text class="feature-name">年度进度</text>
+          <text class="feature-desc">以日、月、年为单位，感知时间的流逝。</text>
+        </view>
+        <view class="feature-item">
+          <text class="feature-name">待办管理</text>
+          <text class="feature-desc">每日三张卡片，专注最重要的三件事。</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="section">
+      <text class="section-title">应用设置</text>
+      <view class="setting-item">
+        <text class="setting-name">打卡温馨提醒</text>
+        <switch checked="{{reminderEnabled}}" bindchange="onReminderChange" color="var(--primary)"></switch>
+      </view>
+      <text class="setting-desc">开启后，若今日未填写人生总结，进入首页时将有温和提示。</text>
+    </view>
+
+    <view class="section">
+      <text class="section-title">隐私说明</text>
+      <text class="section-content" bindtap="showPrivacy">所有数据仅存储于用户本地设备，点击查看详情。</text>
+    </view>
+  </view>
+
+  <view class="footer">
+    <text>© 2024 人生进度管理局</text>
+    <text>由 Antigravity 提供设计与开发支持</text>
+  </view>
+</view>

@@ -1,0 +1,49 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/wallpaper/index",
+    "pages/countdown/index",
+    "pages/cycle/index",
+    "pages/about/index"
+  ],
+  "window": {
+    "backgroundColor": "#F7F9F9",
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#43655A",
+    "navigationBarTitleText": "人生进度管理局",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#94A3B8",
+    "selectedColor": "#43655A",
+    "backgroundColor": "#FFFFFF",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "人生",
+        "iconPath": "images/tab_life.png",
+        "selectedIconPath": "images/tab_life_active.png"
+      },
+      {
+        "pagePath": "pages/countdown/index",
+        "text": "倒计时",
+        "iconPath": "images/tab_time.png",
+        "selectedIconPath": "images/tab_time_active.png"
+      },
+      {
+        "pagePath": "pages/cycle/index",
+        "text": "年度",
+        "iconPath": "images/tab_cycle.png",
+        "selectedIconPath": "images/tab_cycle_active.png"
+      },
+      {
+        "pagePath": "pages/about/index",
+        "text": "关于",
+        "iconPath": "images/tab_about.png",
+        "selectedIconPath": "images/tab_about_active.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json"
+}

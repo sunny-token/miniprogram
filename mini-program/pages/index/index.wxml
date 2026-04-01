@@ -1,0 +1,198 @@
+<view class="container {{theme}}">
+  <!-- Ritual Ritualistic Reminder Card -->
+  <view class="ritual-banner {{ritualAnimate ? 'show' : ''}}" wx:if="{{shouldShowRitual}}">
+    <view class="ritual-header">
+      <text class="ritual-subtitle">{{ritualData.subtitle}}</text>
+      <view class="ritual-close" catchtap="closeRitual">✕</view>
+    </view>
+    <view class="ritual-body">
+      <view class="ritual-main">
+        <text class="ritual-greeting">{{ritualData.greeting}}，</text>
+        <text class="ritual-quote">{{ritualQuote}}</text>
+      </view>
+      <view class="ritual-action" bindtap="scrollToSign">
+        <text class="ritual-action-single">记</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Header Info Area -->
+  <view class="header-section">
+    <view class="picker-row">
+      <picker mode="date" value="{{settings.birthDate}}" bindchange="onBirthdayChange" class="picker-btn">
+        <view class="picker-content">
+          <text class="picker-label">出生日期</text>
+          <text class="picker-value">{{settings.birthDate}}</text>
+        </view>
+      </picker>
+      <picker mode="selector" range="{{[60, 70, 80, 90, 100]}}" value="{{[60, 70, 80, 90, 100].indexOf(settings.lifeExpectancy)}}" bindchange="onLifespanChange" class="picker-btn">
+        <view class="picker-content">
+          <text class="picker-label">预期寿命</text>
+          <text class="picker-value">{{settings.lifeExpectancy}} 岁</text>
+        </view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- Core Progress -->
+  <view class="progress-section">
+    <view class="mode-toggle" bindtap="toggleMode">
+      <image src="/images/icon_{{lifeMode}}.png" class="mode-icon" mode="aspectFit"></image>
+    </view>
+
+    <view class="progress-visual">
+      <view class="visual-container">
+        <!-- Circle View -->
+        <view wx:if="{{lifeMode === 'circle'}}" class="circle-visual">
+          <view class="circle-bg"></view>
+          <view class="circle-active" style="background: conic-gradient(var(--primary-container) {{progress}}%, transparent 0%)"></view>
+          <view class="circle-inner-mask"></view>
+        </view>
+
+        <!-- Grid View -->
+        <view wx:if="{{lifeMode === 'grid'}}" class="grid-visual">
+          <block wx:for="{{100}}" wx:key="index">
+            <view class="grid-dot {{index < progress ? 'active' : ''}}"></view>
+          </block>
+        </view>
+
+        <!-- Rings View -->
+        <view wx:if="{{lifeMode === 'rings'}}" class="rings-visual">
+          <view wx:for="{{[1, 0.85, 0.7, 0.55, 0.4]}}" wx:key="index" class="ring-track" style="width: {{item * 100}}%; height: {{item * 100}}%"></view>
+          <view class="ring-active" style="width: {{progress}}%; height: {{progress}}%"></view>
+        </view>
+
+        <!-- Progress Text Overlay -->
+        <view class="progress-content">
+          <text class="completed-tag">COMPLETED</text>
+          <view class="number-row">
+            <text class="main-number">{{progress}}</text>
+            <text class="percent-symbol">%</text>
+          </view>
+          <text class="status-desc">人生进度</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="stats-display">
+      <view class="stats-main">已度过 <text class="highlight">{{livedDays}}</text> 天 · 剩余 <text class="highlight">{{remainingDays}}</text> 天</view>
+      <view class="countdown-pill">
+        <text class="pill-text">剩余时间：{{remainingTime.years}}年{{remainingTime.months}}月{{remainingTime.days}}天 {{remainingTime.hours}}:{{remainingTime.minutes}}:{{remainingTime.seconds}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Interactive Modules -->
+  <view class="interactive-section">
+    <!-- Daily Sign-in Card -->
+    <view class="sign-card {{isSignedToday ? 'signed' : (reminderEnabled ? 'should-remind' : '')}}" bindtap="{{!isSignedToday ? 'drawSign' : ''}}">
+      <view class="sign-inner">
+        <view class="sign-icon-css {{!isSignedToday && reminderEnabled ? 'breathing' : ''}}">
+          <view wx:if="{{!isSignedToday && reminderEnabled}}" class="red-dot"></view>
+        </view>
+        <view class="sign-info">
+          <text class="sign-title">{{isSignedToday ? '今日之签 (已完成)' : '今日一签'}}</text>
+          <text class="sign-desc">{{isSignedToday ? dailySign.content : '抽一张人生的治愈灵感'}}</text>
+        </view>
+        <view class="sign-action" wx:if="{{!isSignedToday}}">抽取</view>
+        <view class="sign-action secondary" wx:else catchtap="openSummaryPoster">分享海报</view>
+      </view>
+    </view>
+
+    <!-- AI Wallpaper Entrance -->
+    <view class="wallpaper-card" bindtap="goToWallpaper" bindlongpress="onDebugLevel">
+      <view class="wallpaper-preview" style="{{todayWallpaper.url ? 'background-image: url(' + todayWallpaper.url + ')' : ''}}">
+        <view class="streak-tag">连续 {{streakDays}} 天</view>
+        <view class="checkin-status {{isSignedToday ? 'done' : ''}}">
+          <text>{{isSignedToday ? '今日已得' : '打卡领壁纸'}}</text>
+        </view>
+      </view>
+      <view class="wallpaper-info">
+        <view class="title-row">
+          <text class="wallpaper-title">每日 AI 壁纸</text>
+          <view class="level-tag master" wx:if="{{streakDays >= 30}}">Master</view>
+          <view class="level-tag" wx:elif="{{streakDays > 0}}">Lv.{{streakDays}}</view>
+        </view>
+        <text class="wallpaper-desc">{{isSignedToday ? '今日主题：' + (todayWallpaper.style || '治愈山水') : '完成打卡，解锁高清 4K 治愈壁纸'}}</text>
+      </view>
+      <view class="action-arrow">→</view>
+    </view>
+  </view>
+
+  <!-- Actions -->
+  <view class="action-footer">
+    <view class="btn-group">
+      <button class="btn-generate" bindtap="openPoster">生成进度海报</button>
+      <text class="action-hint">分享人生进度，珍惜当下每一刻</text>
+    </view>
+  </view>
+
+  <!-- Poster Modal -->
+  <view class="modal {{isPosterOpen ? 'show' : ''}}" catchtouchmove="true">
+    <view class="modal-mask" bindtap="closePoster"></view>
+    <view class="modal-container">
+      <view class="poster-preview style-{{posterStyle}}">
+        <block wx:if="{{!isSummaryPoster}}">
+          <view class="poster-header">
+            <view class="bureau-title">人生进度管理局</view>
+            <view class="bureau-subtitle">Bureau of Life Progress</view>
+          </view>
+          <view class="poster-visual">
+            <view class="poster-circle">
+              <text class="poster-val">{{progress}}%</text>
+              <text class="poster-label">COMPLETED</text>
+            </view>
+          </view>
+        </block>
+        <block wx:else>
+          <view class="poster-header summary">
+            <view class="bureau-title">今日人生结语</view>
+            <view class="summary-date">{{now}}</view>
+          </view>
+          <view class="summary-stats">
+            <view class="stat-box">
+              <text class="stat-num">{{progress}}%</text>
+              <text class="stat-lab">人生进度</text>
+            </view>
+            <view class="stat-box">
+              <text class="stat-num">{{stats.totalCheckIns}}</text>
+              <text class="stat-lab">累计打卡</text>
+            </view>
+            <view class="stat-box">
+              <text class="stat-num">{{stats.totalCountdowns}}</text>
+              <text class="stat-lab">重要时刻</text>
+            </view>
+            <view class="stat-box">
+              <text class="stat-num">{{stats.yearRemaining}}</text>
+              <text class="stat-lab">年度剩余</text>
+            </view>
+          </view>
+        </block>
+        <view class="poster-footer">
+          <text class="poster-quote">“{{quote}}”</text>
+          <view class="poster-meta">
+            <text>Bureau of Life Progress</text>
+            <view class="meta-dot"></view>
+            <text>珍惜当下</text>
+          </view>
+        </view>
+      </view>
+      
+      <view class="modal-controls">
+        <view class="style-toggle" bindtap="switchPosterStyle">风格：{{posterStyle}}</view>
+        <view class="ad-unlock {{isAdUnlocked ? 'unlocked' : ''}}" bindtap="unlockNoWatermark">
+          {{isAdUnlocked ? '✅ 完整版已解锁' : '📺 观看视频解锁'}}
+        </view>
+      </view>
+
+      <view class="modal-actions">
+        <button class="btn-secondary" bindtap="savePoster">保存图片</button>
+        <button class="btn-primary" open-type="share">分享好友</button>
+      </view>
+      
+      <view class="btn-close" bindtap="closePoster">×</view>
+    </view>
+  </view>
+
+  <view class="safe-area-bottom"></view>
+</view>

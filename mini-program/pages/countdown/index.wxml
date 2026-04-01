@@ -1,0 +1,145 @@
+<view class="container {{theme}}">
+  <view class="page-header">
+    <text class="quote">“逝者如斯夫，不舍昼夜。”</text>
+    <view class="title-row">
+      <text class="title">时间行囊</text>
+      <view class="title-decoration"></view>
+    </view>
+  </view>
+
+  <view class="countdown-list">
+    <block wx:if="{{sortedCountdowns.length === 0}}">
+      <view class="empty-state">
+        <view class="empty-icon-box">
+          <text class="plus-symbol">+</text>
+        </view>
+        <text class="empty-text">点击下方按钮，开启一段时光记录</text>
+      </view>
+    </block>
+    <block wx:else>
+      <view wx:for="{{sortedCountdowns}}" wx:key="id" class="card countdown-card {{item.isPinned ? 'pinned' : ''}}">
+        <view class="card-top">
+          <view class="tag-group">
+            <text class="tag category">{{item.category === 'growth' ? '成长' : (item.category === 'life' ? '生活' : '记录')}}</text>
+            <text wx:if="{{item.isPinned}}" class="tag pinned-tag">置顶</text>
+          </view>
+          <view class="action-buttons">
+             <view class="btn-icon pin-btn {{item.isPinned ? 'active' : ''}}" bindtap="handleTogglePin" data-id="{{item.id}}"></view>
+             <view class="btn-icon delete-btn" bindtap="handleDelete" data-id="{{item.id}}"></view>
+          </view>
+        </view>
+
+        <view class="card-main">
+          <text class="event-title">{{item.title}}</text>
+          <text class="event-desc">{{item.description || '珍惜当下，便是最好的安排。'}}</text>
+        </view>
+
+        <view class="card-bottom">
+          <view class="time-display">
+            <view class="time-number {{item.isPast ? 'is-past' : ''}}">
+              <text class="val">{{item.days}}</text>
+              <text class="unit">DAYS</text>
+            </view>
+            <text class="time-label">{{item.isPast ? '时光已逝' : '距离那天'}}</text>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- FAB -->
+  <view class="fab-btn" bindtap="openModal">
+    <view class="plus-icon"></view>
+  </view>
+
+  <!-- Add Modal -->
+  <view class="modal {{isModalOpen ? 'show' : ''}}" catchtouchmove="true">
+    <view class="modal-mask" bindtap="closeModal"></view>
+    <view class="modal-sheet">
+      <view class="sheet-header">
+        <text class="sheet-title">开启一段记录</text>
+        <view class="sheet-close" bindtap="closeModal">×</view>
+      </view>
+
+      <view class="sheet-body">
+        <view class="field">
+          <text class="label">常用场景</text>
+          <scroll-view scroll-x class="preset-row">
+            <view wx:for="{{presets}}" wx:key="index" class="preset-item" bindtap="selectPreset" data-preset="{{item}}">
+              {{item.title}}
+            </view>
+          </scroll-view>
+        </view>
+
+        <view class="field">
+          <text class="label">目标名称</text>
+          <input class="input-ctrl" value="{{newTitle}}" bindinput="onInputChange" data-field="newTitle" placeholder="例如：下一场旅行" />
+        </view>
+
+        <view class="field">
+          <text class="label">目标日期</text>
+          <picker mode="date" value="{{newDate}}" bindchange="onInputChange" data-field="newDate" class="input-ctrl picker">
+            <text>{{newDate}}</text>
+          </picker>
+        </view>
+
+        <view class="field">
+          <text class="label">描述信息</text>
+          <textarea class="textarea-ctrl" value="{{newDesc}}" bindinput="onInputChange" data-field="newDesc" placeholder="那一刻，会是什么样的心情？" />
+        </view>
+
+        <view class="submit-btn" bindtap="handleAdd">开启倒计时</view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- Time Capsule Section -->
+  <view class="capsule-section">
+    <view class="capsule-header">
+      <text class="capsule-title">时光胶囊</text>
+      <text class="capsule-action" bindtap="openCapsuleModal">写给未来</text>
+    </view>
+    <scroll-view scroll-x class="capsule-scroll">
+      <view class="capsule-list">
+        <view wx:for="{{timeCapsules}}" wx:key="id" class="capsule-card {{item.isOpen ? 'opened' : 'locked'}}">
+          <view class="capsule-status">{{item.isOpen ? '已拆封' : '待拆封'}}</view>
+          <text class="capsule-text">{{item.isOpen ? item.content : '写给 ' + item.openDate + ' 的密信'}}</text>
+          <view class="capsule-meta">{{item.isOpen ? '埋于 ' + item.createdAt : '将于 ' + item.openDate + ' 开启'}}</view>
+        </view>
+        <view class="capsule-card empty" bindtap="openCapsuleModal" wx:if="{{timeCapsules.length === 0}}">
+          <text>还没有埋下时光胶囊\n给未来的自己写句话吧</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- Add Capsule Modal -->
+  <view class="modal {{isCapsuleModalOpen ? 'show' : ''}}" catchtouchmove="true">
+    <view class="modal-mask" bindtap="closeCapsuleModal"></view>
+    <view class="modal-sheet">
+      <view class="sheet-header">
+        <text class="sheet-title">埋下时光胶囊</text>
+        <view class="sheet-close" bindtap="closeCapsuleModal">×</view>
+      </view>
+
+      <view class="sheet-body">
+         <view class="field">
+          <text class="label">胶囊内容</text>
+          <textarea class="textarea-ctrl" placeholder="想对未来的自己说点什么？" value="{{capsuleContent}}" bindinput="onCapsuleInput"></textarea>
+        </view>
+        
+        <view class="field">
+          <text class="label">开启日期</text>
+          <picker mode="date" value="{{capsuleOpenDate}}" bindchange="onCapsuleDateChange" class="input-ctrl picker">
+            <text>{{capsuleOpenDate}}</text>
+          </picker>
+        </view>
+
+        <view class="submit-btn" bindtap="submitCapsule">埋入时光</view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- Safe area -->
+  <view class="footer-gap"></view>
+</view>
